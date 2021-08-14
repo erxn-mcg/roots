@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title%}Home{% endblock %}
+{% block content%}
+<h1 style="color: #6bc595;"align="center">Create a Post</h1>
+
+<form method='POST'>
+    <textarea placeholder="Can anyone help me learn Python?" style="display: block; margin-left: auto; margin-right: auto; border: 5px solid #6bc595; background: #e4f7ed; width: 60%; height: 150px;" name="text" id="text" class="form-control"></textarea>
+    <p style="
+        width: 60%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: right;
+        margin-top: 15px;
+        color: #818181;
+    "id="result"></p>
+    <br />
+    <div align="center">
+        <button type="submit" style="background-color: #6bc595" class="btn btn-lg">Post</button>
+    </div>
+</form>
+<br />
+<div align="center">
+    <a href="/home"><button type="button" class="btn btn-secondary btn-lg">Back</button></a>
+</div>
+<script>
+    var myText = document.getElementById("text");
+var result = document.getElementById("result");
+var limit = 300;
+result.textContent = 0 + "/" + limit;
+
+myText.addEventListener("input",function(){
+    var textLength = myText.value.length;
+    result.textContent = textLength + "/" + limit;
+
+    if(textLength > limit){
+        myText.style.borderColor = "#ff2851";
+        result.style.color = "#ff2851";
+    }
+    else{
+        myText.style.borderColor = "#b2b2b2";
+        result.style.color = "#737373";
+    }
+});
+</script>
+{% endblock %}
+
