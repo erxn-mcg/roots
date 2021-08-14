@@ -1,0 +1,108 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+    %}
+    <head>
+        <script src="https://kit.fontawesome.com/04037a73f7.js" crossorigin="anonymous"></script>
+        <style>
+          button:hover {
+            background-color: #7fcca3;
+          }
+        </style>
+    </head>
+    <div class="header" style="height: 150px; background-color: #b4ffd7; width: 100%;">
+      <div class="logo">
+        <img style="height: 100px; width: 100px; float: left; margin-left: 10px; margin-top: 30px; margin-right: 30px;" src="https://i.postimg.cc/hGQJkRDP/logo.png">
+      </div>
+      <h1 style="margin-top: 0px; float: left; color: #70d49f;">roots</h1>
+      <h1 align="center" style="margin-left: 220px; float: left; color: rgb(128, 128, 128);">Welcome to the forum!</h1>
+      <p style="float:right; color: #bbb; font-size: 20px; margin-top: 15px; margin-right: 20px;">Ask, Answer, Learn</p>
+    </div>
+    <h1 align="center" style="margin-top: 40px; color: #235f3f">{% block header %}Posts{% endblock %}</h1>
+    <div id="posts" style="width: 60%; display: block; margin-left: auto; margin-right: auto;">
+      {% for post in posts %}
+      <div style="border: 2px solid #235f3f" class="card border-custom">
+        <div style="background-color: #e2f1e9" class="card-header d-flex justify-content-between align-items-center">
+          <a style="color:#3b7454" href="/posts/{{post.user.username}}">{{post.user.username}}</a>
+          <div>
+              {{ post.likes|length }}
+                {% if user.id in post.likes|map(attribute="author")|list %}
+                <a style="color:#2eac64" href="/like-post/{{post.id}}"><i class="fas fa-thumbs-up"></i></a>
+                {% else %}
+                <a style="color:#2eac64" href="/like-post/{{post.id}}"><i class="far fa-thumbs-up"></i></a>
+                {% endif %}
+            {% if user.id == post.author %}
+            <div class="btn-group">
+                <button style="background-color: #9fdfbd;"
+                    type="button"
+                    class="btn btn-sm btn-custom dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                ></button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="/delete-post/{{post.id}}" class="dropdown-item">Delete</a>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-text">{{post.text}}</div>
+          <br />
+          <div class="collapse" id="comments-{{post.id}}">
+              <div class="card">
+                  <div class="card-body" id="comments-expanded-{{post.id}}">
+                      {% for comment in post.comments %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <a style="color:#3b7454" href="/posts/{{ comment.user.username }}">{{ comment.user.username }}</a>: {{ comment.text }}
+                            </div>
+                            <div>
+                                <small class="text-muted">{{comment.date_created}}</small>
+                                {% if user.id == comment.author or user.id == post.author %}
+                                <div class="btn-group">
+                                    <button style="background-color: #9fdfbd;"
+                                      type="button"
+                                      class="btn btn-sm btn-custom dropdown-toggle"
+                                      data-bs-toggle="dropdown"
+                                    ></button>
+                                    <ul class="dropdown-menu">
+                                      <li>
+                                        <a href="/delete-comment/{{comment.id}}" class="dropdown-item">Delete</a>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  {% endif %}
+                            </div>
+                        </div>
+                        
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+          <p class="card-text">
+            {% if post.comments|length > 0 %}
+            <a style="color: #3b7454;" data-bs-toggle="collapse" href="#comments-{{post.id}}" role="button">
+                <small>View {{post.comments|length}} Comments</small>
+             </a>
+            {% else %}
+                <small class="text-muted">No Comments</small>
+            {% endif %}
+          </p>
+          <form class="input-group mb-3", method='POST' action="/create-comment/{{post.id}}">
+            <input type="text" id="text" name="text" class="form-control" placeholder="Comment..." />
+            <button style="background-color: #9fdfbd;" type="submit" class="btn btn-custom">Comment</button>
+          </form>
+        </div>
+        <div style="background-color: #e2f1e9" class="card-footer text-muted">{{post.date_created}}</div>
+      </div>
+      <br/ > {% endfor %}
+    </div>
+    {% block footer %}
+    <div align="center">
+      <a href="/create-post"
+        ><button type="button" style="background-color: #9fdfbd;" class="btn bg-custom btn-lg">
+          Create a Post
+        </button></a
+      >
+    </div>
+    {% endblock %} {% endblock %}

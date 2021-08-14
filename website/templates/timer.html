@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/04037a73f7.js" crossorigin="anonymous"></script>
+    <title>{% block title%}{% endblock %}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+            body{
+                background-color: #CFFFE5;
+                font-family: 'Quicksand', sans-serif;
+
+            }
+        .logo {
+            height: 50px;
+            margin-bottom: 5px;
+            width: 50px;
+        }
+        .container {
+  width: 100%;
+  max-width: 500px;
+  min-width: 250px;
+  margin: 20px auto;
+  float: left;
+}
+
+h1 {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: rgb(124, 124, 124);
+}
+
+.row {
+  overflow: hidden;
+}
+
+.col-half {
+  width: 50%;
+  float: left;
+}
+
+.knob-wrapper {
+  text-align: center;
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+
+.btn {
+  display: inline-block;
+  width: 80px;
+  margin: 4px;
+  padding: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btn-green {
+  color: rgb(133, 185, 133);
+  border: 2px solid rgb(164, 228, 164);
+}
+
+.btn-green:hover {
+  background-color: rgb(134, 218, 134);
+}
+
+.btn-yellow {
+  color: rgb(104, 202, 196);
+  border: 2px solid rgb(117, 218, 212);
+}
+
+.btn-yellow:hover {
+  background-color: rgb(34, 162, 172);
+}
+
+.btn-red {
+  color: rgb(117, 117, 117);
+  border: 2px solid rgb(117, 117, 117);
+}
+
+.btn-red:hover {
+  background-color: rgb(88, 88, 88);
+}
+
+
+.hidden {
+  display: none;
+}
+
+
+#container{
+	width:800px;
+	margin:50px auto;
+	padding: 20px;
+	width:150%;
+    margin-left: 150%;
+}
+#container h2{
+	text-align:center;
+	color:rgb(0, 85, 11);
+}
+
+#quoteContainer{
+	width:75%;
+	background: inherit;
+	padding:10px;
+	margin:30px auto;
+	text-align: center;
+  height:100px;
+}
+
+#buttonContainer{
+	width: 100%;
+	text-align: center;
+}
+
+#quoteButton{
+	width:200px;
+	margin-top: 10px;
+	border:2px solid #66a582;
+	color:#66a582;
+	font-family: inherit;
+	font-weight: bold;
+	padding:5px;
+	text-decoration: none;
+	text-align: center;
+}
+
+#quoteButton:hover{
+	cursor:pointer;
+	background:#64a782;
+	color: #fff;	
+}
+
+#quoteButton:active{
+	cursor: pointer;
+}
+
+#quoteButton{
+	display: inline-block;
+}
+
+#quoteGenius{
+	font-style: italic;
+	font-weight: 600;
+	text-align: center;
+}
+
+@media screen and(max-width:760px){
+	#quoteButton,#addNew{
+		display: block;
+	}
+}
+
+.sound {
+    height: 50px;
+    width: 150px;
+    background-color: rgb(136, 204, 140);
+    float: left;
+    margin: 30px;
+    border-radius: 40px ;
+}
+
+.sound:hover {
+    background: #6bc595;
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <div class="navbar-nav">
+                <a style="margin-right: 480px; font-size: 20px; color: #6bc595;" class="nav-item nav-link title" href="/welcome">roots</a>
+
+                    
+                    <a class="nav-item nav-link" href="/home">Forum</a>
+                    <a class="nav-item nav-link" href="/flashcard">Flashcards</a>
+                    <a class="nav-item nav-link active" href="/timer">Timer</a>
+                    <a class="nav-item nav-link" href="/checker">Checker</a>
+                    <a class="nav-item nav-link" href="/logout">Log Out</a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+<div class="container">
+    <div class="container">
+        <div class="header">
+          <h1>Pomodoro Timer</h1>
+        </div>
+        
+        <div class="row">
+          <div class="col-half knob-wrapper">
+            <h5>Session Length</h5>
+            <input type="text" value="25" size="5" id="session-knob" />
+          </div>
+          <div class="col-half knob-wrapper">
+            <h5>Break Length</h5>
+            <input type="text" value="5" size="5" id="break-knob" />
+          </div>
+        </div>
+        
+        <div class="buttons">
+          <a id="cmd-reset" class="btn btn-red"><i class="fa fa-undo"></i> Reset</a>
+          <a id="cmd-pause" class="btn btn-yellow hidden"><i class="fa fa-pause"></i> Pause</a>
+          <a id="cmd-go" class="btn btn-green"><i class="fa fa-play"></i> Start</a>
+        </div>
+        
+        
+        <div class="timer knob-wrapper">
+          <input type="text" value="1500" size="5" id="timer-display" />
+        </div>
+        
+       
+        
+      </div>
+      <div id="container">
+		<h2>Motivational Messages</h2>
+			<div id="quoteContainer">
+				<p></p>
+				<p id="quoteGenius"></p>			
+			</div>
+			
+			<div id="buttonContainer">
+				<a href="#" id="quoteButton">Generate New</a>
+		</div>
+        <h2 style="margin-top: 100px;">Play some relaxing sounds</h2>
+        <div class="all">
+            <div class="sound">
+                
+                <p style="float: left; margin-left: 10%; margin-top: 8px; font-size: 22px;">Rain</p><iframe style="float:right; margin-top: 10px; margin-right: 15px;" frameborder="0" scrolling="no" src="https://freesound.org/embed/sound/iframe/243627/simple/small/" width="50" height="30"></iframe>
+            </div>
+            <div class="sound">
+                <p style="float: left; margin-left: 10%; margin-top: 8px; font-size: 22px;">Waves</p><iframe style="float:right; margin-top: 10px; margin-right: 15px;" frameborder="0" scrolling="no" src="https://freesound.org/embed/sound/iframe/263995/simple/small/" width="50" height="30"></iframe>
+            </div>
+            <div class="sound">
+                <p style="float: left; margin-left: 10%; margin-top: 8px; font-size: 22px;">Beach</p><iframe style="float:right; margin-top: 10px; margin-right: 15px;" frameborder="0" scrolling="no" src="https://freesound.org/embed/sound/iframe/507742/simple/small/" width="50" height="30"></iframe>
+            </div>
+        </div>
+	</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js'></script>
+<script type="text/javascript" src="{{ url_for('static', filename='index.js')}}"></script>
+<script>
+
+$(document).ready(function() {
+
+  var targetTime = undefined;
+  var targetDelta = undefined;
+  var intervalId = undefined;
+  var reset = true;
+  var onSession = true;
+  var mute = false;
+  var breakLength;
+
+  function setupTimerDisplay() {
+    var config = {};
+    var value = 0;
+    
+    if (onSession === true) {
+      value = $('#session-knob').val() * 60;
+      $('#timer-display').val(value);
+      config.max = value;
+      config.fgColor = '#6C6';
+      config.inputColor = '#6C6';
+      config.format = function(v) {
+        var sec = parseInt(v);
+        var min = Math.floor(sec / 60);
+        sec -= min * 60;
+        return min + ':' + (sec < 10 ? "0" + sec : sec);
+      };
+    }
+    else {
+      var max = $('#break-knob').val() * 60;
+      config.max = max;
+      config.fgColor = '#eee';
+      config.inputColor = '#eee';
+      config.format = function(v) {
+        var sec = parseInt(v);
+        sec = max - sec;
+        var min = Math.floor(sec / 60);
+        sec -= min * 60;
+        return min + ':' + (sec < 10 ? "0" + sec : sec);
+      };
+    }
+    
+    $('#timer-display').trigger('configure', config);
+    $('#timer-display').val(value);
+    $('#timer-display').trigger('change');
+  }
+ 
+  if (jQuery().knob) {
+    $('#session-knob').knob({
+      'min': 0,
+      'max': 120,
+      'step': 1,
+      'width': 100,
+      'height': 100,
+      'fgColor': '#50C878',
+      'bgColor': '#ececec',
+      'release': function() {
+        if (reset) {
+          targetDelta = $('#session-knob').val() * 60000;
+          setupTimerDisplay();
+        }
+      }
+    });
+
+    $('#break-knob').knob({
+      'min': 0,
+      'max': 30,
+      'step': 1,
+      'width': 100,
+      'height': 100,
+      'fgColor': '#CD5c5c',
+      'bgColor': '#ececec'
+    });
+
+    $('#timer-display').knob({
+      'min': 0,
+      'max': 1500,
+      'width': 200,
+      'height': 200,
+      'rotation': 'anticlockwise',
+      'fgColor': '#50c878',
+      'bgColor': '#ececec',
+      'readOnly': true
+    });
+  }
+
+  function updateTimer() {
+    var now = new Date();
+    targetDelta = targetTime.getTime() - now.getTime();
+    
+    if (targetDelta > 0) {
+      var sec = Math.ceil(targetDelta / 1000);
+      if (!onSession) sec = breakLength - sec;
+      $('#timer-display').val(sec);
+      $('#timer-display').trigger('change');
+    }
+    else {
+      if (onSession) {
+        if (!mute) $('#snd-endofsession')[0].play();
+        onSession = false;
+        breakLength = $('#break-knob').val() * 60;
+        targetDelta = breakLength * 1000;
+      }
+      else {
+        if (!mute) $('#snd-endofbreak')[0].play();
+        onSession = true;
+        targetDelta = $('#session-knob').val() * 60000;
+      }
+      targetTime = new Date(Date.now() + targetDelta);
+      setupTimerDisplay();
+    }
+  }
+
+  $('#cmd-reset').click(function() {
+    targetDelta = $('#session-knob').val() * 60000;
+    if (intervalId) {
+      window.clearInterval(intervalId);
+      intervalId = undefined;
+    }
+    reset = true;
+    onSession = true;
+    $('#cmd-pause').addClass('hidden');
+    $('#cmd-go').removeClass('hidden');
+    setupTimerDisplay();
+    return false;
+  });
+  
+  $('#cmd-go').click(function() {
+    targetTime = new Date(Date.now() + targetDelta);
+    intervalId = window.setInterval(updateTimer, 200);
+    reset = false;
+    breakLength = $('#break-knob').val() * 60;
+    $('#cmd-go').addClass('hidden');
+    $('#cmd-pause').removeClass('hidden');
+    return false;
+  });
+  
+  $('#cmd-pause').click(function() {
+    window.clearInterval(intervalId);
+    intervalId = undefined;
+    $('#cmd-pause').addClass('hidden');
+    $('#cmd-go').removeClass('hidden');
+    return false;
+  });
+  
+  targetDelta = $('#session-knob').val() * 60000;
+  setupTimerDisplay();
+  
+ 
+});
+
+$(document).ready(function(){
+		var quoteSource=[
+		{
+			quote: "Start by doing what's necessary; then do what's possible; and suddenly you are doing the impossible.",
+			name:"Francis of Assisi"
+	    },
+	    {
+	    	quote:"Believe you can and you're halfway there.",
+	    	name:"Theodore Roosevelt"
+	    },
+	    {
+	    	quote:"It does not matter how slowly you go as long as you do not stop.",
+	    	name:"Confucius"
+	    },
+	    {
+	    	quote:"Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.",
+	    	name:"Thomas A. Edison"
+	    },
+	    {
+	    	quote:"It always seems impossible until it is done.",
+	    	name:"Nelson Mandela"
+	    },
+	    {
+	    	quote:"Don't watch the clock; do what it does. Keep going.",
+	    	name:"Sam Levenson"
+	    },
+	    {
+	    	quote:"Do not let what you cannot do interfere with what you can do.",
+	    	name:"John R. Wooden"
+	    },
+	    {
+	    	quote:"There is no substitute for hard work.",
+	    	name:"Thomas Edison"
+	    },
+	    {
+	    	quote:"Expect problems and eat them for breakfast.",
+	    	name:"Alfred A. Montapert"
+	    },
+	    {
+	    	quote:"Start where you are. Use what you have. Do what you can.",
+	    	name:"Arthur Ashe"
+	    },
+	    {
+	    	quote:"Ever tried. Ever failed. No matter. Try Again. Fail again. Fail better.",
+	    	name:"Samuel Beckett"
+	    },
+	    {
+	    	quote:"Quality is never an accident, it is always the result of an effort of intelligence.",
+	    	name:"John Ruskin"
+	    },
+	    {
+	    	quote:"Change your thoughts and you will change your world.",
+	    	name:"Norman Vincent Peale"
+	    },
+	    {
+	    	quote:"Learning without thinking is useless. Think without learning, dangerous.",
+	    	name:"Confucius"
+	    },
+	    {
+	    	quote:"Do not take life too seriously. You will never get out of it alive.",
+	    	name:"Elbert Hubbard"
+	    },
+	    {
+	    	quote:"People who think they know everything are a great annoyance to those of us who do.",
+	    	name:"Isaac Asimov"
+	    },
+	    {
+	    	quote:"Set tough goals and do not stop until you get there.",
+	    	name:"Bo Jackson"
+	    },
+	    {
+	    	quote:"The secret of success is to do the common things uncommonly well.",
+	    	name:"John D. Rockefeller"
+	    },
+	    {
+	    	quote:"There are no shortcuts to any place worth going.",
+	    	name:"Beverly Sills"
+	    },
+	    {
+	    	quote:"If people only knew how hard I’ve worked to gain my mastery, it wouldn’t seem so wonderful at all.",
+	    	name:"Michelangelo"
+	    },
+	    {
+	    	quote:"If you’re going through hell, keep going.",
+	    	name:"Winston Churchill"
+	    },
+	    {
+	    	quote:"You don’t drown by falling in the water; you drown by staying there.",
+	    	name:"Ed Cole"
+	    },
+	    {
+	    	quote:"Success is not final, failure is not fatal; it is the courage to continue that counts.",
+	    	name:"Winston Churchill"
+	    },
+	    {
+	    	quote:"Hapiness is not something ready made. It comes from your own actions.",
+	    	name:"Dalai Lama"
+	    }
+
+	];
+		
+
+		$('#quoteButton').click(function(evt){
+	
+			var quote = $('#quoteContainer p').text();
+			var quoteGenius = $('#quoteGenius').text();
+
+			evt.preventDefault();
+		
+			var sourceLength = quoteSource.length;
+			var randomNumber= Math.floor(Math.random()*sourceLength);
+
+			for(i=0;i<=sourceLength;i+=1){
+			var newQuoteText = quoteSource[randomNumber].quote;
+			var newQuoteGenius = quoteSource[randomNumber].name;
+
+      var timeAnimation = 500;
+      var quoteContainer = $('#quoteContainer');
+    
+      quoteContainer.fadeOut(timeAnimation, function(){
+        quoteContainer.html('');
+				quoteContainer.append('<p>'+newQuoteText+'</p>'+'<p id="quoteGenius">'+'-								'+newQuoteGenius+'</p>');
+        
+        quoteContainer.fadeIn(timeAnimation);
+      });  
+			
+			break;
+		};
+	
+	});
+		
+		
+});
+
+
+</script>
+</body>
+</html>
