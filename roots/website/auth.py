@@ -66,7 +66,7 @@ def logout():
 
 @auth.route("/welcome")
 def welcome():
-    return render_template("welcome.html")
+    return render_template("index.html")
 
 @auth.route("/timer")
 @login_required
